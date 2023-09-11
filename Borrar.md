@@ -45,6 +45,7 @@ print(rojo .. "Este es un texto rojo en Lua" .. reset_color)
 ```
 
 Python:
+```
 print(f"{rojo}{subrayado}Este texto es rojo y subrayado{reset_color}")
 ```
 
