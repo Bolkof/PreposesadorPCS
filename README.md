@@ -1,6 +1,13 @@
 # archivo ASCII_color
 Darle color a las palabras en la terminal con escapes ascii
 
+## descargar repositorii
+
+Puedes utilizar el comando `git clone` en Linux y git bash para descargar este repositorio de GitHub.
+
+```bash
+https://github.com/Bolkof/ASCIIcolor/tree/main
+```
 
 ## que es esta carpeta
 
