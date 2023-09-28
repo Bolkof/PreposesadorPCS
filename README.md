@@ -6,18 +6,21 @@ Este programa en Python te permite observar cambios en archivos Pug, Stylus y Co
 
 Asegúrate de tener los siguientes requisitos previos instalados en tu entorno de desarrollo:
 
-- **Python**: Este programa está escrito en Python, por lo que necesitas tener Python 3.10 instalado en tu sistema. 
+**Python**: Este programa está escrito en Python, por lo que necesitas tener Python 3.10 instalado en tu sistema. 
+
+> apt-get install python 
 
 **Node.js**: Para la compilación de archivos Stylus y CoffeeScript, se utiliza Node.js como plataforma. Puedes descargar Node.js. 
+
 > apt-get install node.js
   
 **Pug (Jade)**: Pug es un motor de plantillas para HTML. Puedes instalar la CLI de Pug utilizando el siguiente comando npm:
 
-> sudo apt-get install pug-cli
+> npm install pug-cli
 
 **Stylus**: Stylus es un preprocesador de CSS. Puedes instalar la CLI de Stylus con el siguiente comando npm:
 
-> sudo apt-get install stylus
+> npm install stylus
 
 **CoffeeScript**: CoffeeScript es un lenguaje que se compila a JavaScript. Puedes instalar la CLI de CoffeeScript utilizando el siguiente comando npm:
 
