@@ -1,23 +1,79 @@
-rojo = "\033[91m"
-cyan = "\033[96m"
-magenta = "\033[95m"
-blanco = "\033[97m"
-verde = "\033[92m"
-azul = "\033[94m"
-amarillo = "\033[93m"
-negro = "\033[90m"
+const fs = require('fs');
+const { exec } = require('child_process');
 
-reset_color = "\033[0m"
-subrayado = "\033[4m"
-parpadeante = "\033[5m"
-invertido = "\033[7m"
-tachado = "\033[9m"
+// Directorios de archivos de origen
+const directorioPugOrigen = './src_pug';
+const directorioStylusOrigen = './src_stylus';
+const directorioCoffeeScriptOrigen = './src_coffeescript';
 
+// Directorios de archivos de destino
+const directorioHtmlDestino = './build_html';
+const directorioCssDestino = './build_css';
+const directorioJsDestino = './build_js';
 
-amarillo_brillante = "\033[93;1m"
-rojo_brillante = "\033[91;1m"
-verde_brillante = "\033[92;1m"
-azul_brillante = "\033[94;1m"
-magenta_brillante = "\033[95;1m"
-cyan_brillante = "\033[96;1m"
-blanco_brillante = "\033[97;1m"
+// Comandos para compilar archivos Pug, Stylus y CoffeeScript
+const comandoCompilarPug = 'pug {} -o {}';
+const comandoCompilarStylus = 'stylus {} -o {}';
+const comandoCompilarCoffeeScript = 'coffee -c {} -o {}';
+
+// Función para ejecutar un comando en la línea de comandos
+function ejecutarComando(comando, callback) {
+    exec(comando, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error al ejecutar el comando: ${error}`);
+            return;
+        }
+        callback(stdout);
+    });
+}
+
+// Función para observar cambios en archivos
+function observarCambios() {
+    try {
+        fs.watch(directorioPugOrigen, { recursive: true }, (eventType, filename) => {
+            if (filename.endsWith('.pug')) {
+                const comando = comandoCompilarPug.replace('{}', `${directorioPugOrigen}/${filename}`).replace('{}', directorioHtmlDestino);
+                ejecutarComando(comando, (resultado) => {
+                    if (resultado) {
+                        console.log(resultado);
+                    } else {
+                        console.log(`Compilado: ${filename} -> ${directorioHtmlDestino}`);
+                    }
+                });
+            }
+        });
+
+        fs.watch(directorioStylusOrigen, { recursive: true }, (eventType, filename) => {
+            if (filename.endsWith('.styl')) {
+                const comando = comandoCompilarStylus.replace('{}', `${directorioStylusOrigen}/${filename}`).replace('{}', directorioCssDestino);
+                ejecutarComando(comando, (resultado) => {
+                    if (resultado) {
+                        console.log(resultado);
+                    } else {
+                        console.log(`Compilado: ${filename} -> ${directorioCssDestino}`);
+                    }
+                });
+            }
+        });
+
+        fs.watch(directorioCoffeeScriptOrigen, { recursive: true }, (eventType, filename) => {
+            if (filename.endsWith('.coffee')) {
+                const comando = comandoCompilarCoffeeScript.replace('{}', `${directorioCoffeeScriptOrigen}/${filename}`).replace('{}', directorioJsDestino);
+                ejecutarComando(comando, (resultado) => {
+                    if (resultado) {
+                        console.log(resultado);
+                    } else {
+                        console.log(`Compilado: ${filename} -> ${directorioJsDestino}`);
+                    }
+                });
+            }
+        });
+
+        console.log('Observando archivos Pug, Stylus y CoffeeScript...');
+        console.log('Presiona Ctrl+C para salir.');
+    } catch (error) {
+        console.error(`Error: ${error}`);
+    }
+}
+
+observarCambios();
