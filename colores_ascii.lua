@@ -1,23 +1,69 @@
-rojo = "\033[91m"
-cyan = "\033[96m"
-magenta = "\033[95m"
-blanco = "\033[97m"
-verde = "\033[92m"
-azul = "\033[94m"
-amarillo = "\033[93m"
-negro = "\033[90m"
+-- Módulo para ejecutar comandos en la línea de comandos
+function ejecutarComando(comando)
+    local handle = io.popen(comando)
+    local resultado = handle:read("*a")
+    handle:close()
+    return resultado
+end
 
-reset_color = "\033[0m"
-subrayado = "\033[4m"
-parpadeante = "\033[5m"
-invertido = "\033[7m"
-tachado = "\033[9m"
+-- Directorios de archivos de origen
+local directorioPugOrigen = './src_pug'
+local directorioStylusOrigen = './src_stylus'
+local directorioCoffeeScriptOrigen = './src_coffeescript'
 
+-- Directorios de archivos de destino
+local directorioHtmlDestino = './build_html'
+local directorioCssDestino = './build_css'
+local directorioJsDestino = './build_js'
 
-amarillo_brillante = "\033[93;1m"
-rojo_brillante = "\033[91;1m"
-verde_brillante = "\033[92;1m"
-azul_brillante = "\033[94;1m"
-magenta_brillante = "\033[95;1m"
-cyan_brillante = "\033[96;1m"
-blanco_brillante = "\033[97;1m"
+-- Comandos para compilar archivos Pug, Stylus y CoffeeScript
+local comandoCompilarPug = 'pug {} -o {}'
+local comandoCompilarStylus = 'stylus {} -o {}'
+local comandoCompilarCoffeeScript = 'coffee -c {} -o {}'
+
+-- Función para observar cambios en archivos
+function observarCambios()
+    while true do
+        for archivo in io.popen('find ' .. directorioPugOrigen):lines() do
+            if string.match(archivo, "%.pug$") then
+                local comando = string.format(comandoCompilarPug, archivo, directorioHtmlDestino)
+                local resultado = ejecutarComando(comando)
+                if resultado ~= "" then
+                    print(resultado)
+                else
+                    print(string.format('Compilado: %s -> %s', archivo, directorioHtmlDestino))
+                end
+            end
+        end
+
+        for archivo in io.popen('find ' .. directorioStylusOrigen):lines() do
+            if string.match(archivo, "%.styl$") then
+                local comando = string.format(comandoCompilarStylus, archivo, directorioCssDestino)
+                local resultado = ejecutarComando(comando)
+                if resultado ~= "" then
+                    print(resultado)
+                else
+                    print(string.format('Compilado: %s -> %s', archivo, directorioCssDestino))
+                end
+            end
+        end
+
+        for archivo in io.popen('find ' .. directorioCoffeeScriptOrigen):lines() do
+            if string.match(archivo, "%.coffee$") then
+                local comando = string.format(comandoCompilarCoffeeScript, archivo, directorioJsDestino)
+                local resultado = ejecutarComando(comando)
+                if resultado ~= "" then
+                    print(resultado)
+                else
+                    print(string.format('Compilado: %s -> %s', archivo, directorioJsDestino))
+                end
+            end
+        end
+
+        print("Presiona Enter para continuar...")
+        io.read()
+    end
+end
+
+print('Observando archivos Pug, Stylus y CoffeeScript...')
+observarCambios()
