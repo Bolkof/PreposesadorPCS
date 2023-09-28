@@ -1,99 +1,68 @@
-## que es esta carpeta
+import subprocess
+import os
 
-El código proporcionado parece estar relacionado con la manipulación de colores de texto en la terminal utilizando códigos de escape ANSI. Aquí tienes algunas variables adicionales que podrían ser útiles:
+# Directorios de archivos de origen
+directorio_pug_origen = './src_pug'
+directorio_stylus_origen = './src_stylus'
+directorio_coffeescript_origen = './src_coffeescript'
 
-Estos códigos de color te permitirán cambiar el color del texto en la terminal a rojo, verde y azul respectivamente. Puedes agregar más colores siguiendo el mismo patrón, cambiando el número de código ANSI para el color deseado. Recuerda también tener una variable `reset_color` como la que ya proporcionaste para restaurar el color original del texto cuando sea necesario.
+# Directorios de archivos de destino
+directorio_html_destino = './build_html'
+directorio_css_destino = './build_css'
+directorio_js_destino = './build_js'
 
-## contenido del archivo
+# Comandos para compilar archivos Pug, Stylus y CoffeeScript
+comando_compilar_pug = 'pug {} -o {}'
+comando_compilar_stylus = 'stylus {} -o {}'
+comando_compilar_coffeescript = 'coffee -c {} -o {}'
 
-Secuencias de escape ANSI para cambiar el color del texto, guardado en variables
+# Función para ejecutar un comando en la línea de comandos
+def ejecutar_comando(comando):
+    proceso = subprocess.Popen(comando, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = proceso.communicate()
+    return stdout, stderr
 
-```
-rojo = "\033[91m"
-cyan = "\033[96m"
-magenta = "\033[95m"
-blanco = "\033[97m"
-verde = "\033[92m"
-azul = "\033[94m"
-amarillo = "\033[93m"
-negro = "\033[90m"
+# Función para observar cambios en archivos
+def observar_cambios():
+    try:
+        while True:
+            for raiz, carpetas, archivos in os.walk(directorio_pug_origen):
+                for archivo in archivos:
+                    ruta_archivo = os.path.join(raiz, archivo)
+                    extension = os.path.splitext(ruta_archivo)[1][1:]  # Obtener la extensión del archivo
+                    if extension == 'pug':
+                        stdout, stderr = ejecutar_comando(comando_compilar_pug.format(ruta_archivo, directorio_html_destino))
+                        if stderr:
+                            print(f'Error al compilar {ruta_archivo}: {stderr.decode("utf-8")}')
+                        else:
+                            print(f'Compilado: {ruta_archivo} -> {directorio_html_destino}')
 
-reset_color = "\033[0m"
-subrayado = "\033[4m"
-parpadeante = "\033[5m"
-invertido = "\033[7m"
-tachado = "\033[9m"
+            for raiz, carpetas, archivos in os.walk(directorio_stylus_origen):
+                for archivo in archivos:
+                    ruta_archivo = os.path.join(raiz, archivo)
+                    extension = os.path.splitext(ruta_archivo)[1][1:]  # Obtener la extensión del archivo
+                    if extension == 'styl':
+                        stdout, stderr = ejecutar_comando(comando_compilar_stylus.format(ruta_archivo, directorio_css_destino))
+                        if stderr:
+                            print(f'Error al compilar {ruta_archivo}: {stderr.decode("utf-8")}')
+                        else:
+                            print(f'Compilado: {ruta_archivo} -> {directorio_css_destino}')
 
-amarillo_brillante = "\033[93;1m"
-rojo_brillante = "\033[91;1m"
-verde_brillante = "\033[92;1m"
-azul_brillante = "\033[94;1m"
-magenta_brillante = "\033[95;1m"
-cyan_brillante = "\033[96;1m"
-blanco_brillante = "\033[97;1m"
-```
+            for raiz, carpetas, archivos in os.walk(directorio_coffeescript_origen):
+                for archivo in archivos:
+                    ruta_archivo = os.path.join(raiz, archivo)
+                    extension = os.path.splitext(ruta_archivo)[1][1:]  # Obtener la extensión del archivo
+                    if extension == 'coffee':
+                        stdout, stderr = ejecutar_comando(comando_compilar_coffeescript.format(ruta_archivo, directorio_js_destino))
+                        if stderr:
+                            print(f'Error al compilar {ruta_archivo}: {stderr.decode("utf-8")}')
+                        else:
+                            print(f'Compilado: {ruta_archivo} -> {directorio_js_destino}')
+                            
+            input("Presiona Enter para continuar...")
+    except KeyboardInterrupt:
+        print("Salida del programa")
 
-
-
-
-## ejemplo de codigo
-Claro, aquí te proporcionaré ejemplos de cómo imprimir texto en los lenguajes Lua, Dart y JavaScript utilizando las variables de formato de color definidas en tu código:
-
-Lua:
-```lua
-print(rojo .. "Este es un texto rojo en Lua" .. reset_color)
-```
-
-Python:
-```
-print(f"{rojo}{subrayado}Este texto es rojo y subrayado{reset_color}")
-```
-
-Dart (asumiendo que estás en un entorno que admite códigos ANSI para colores en la consola, de lo contrario, esto podría no funcionar):
-```dart
-print("$rojoEste es un texto rojo en Dart$reset_color");
-```
-
-JavaScript (en un entorno de consola que admite códigos ANSI para colores, como Node.js):
-```javascript
-console.log(`${rojo}Este es un texto rojo en JavaScript${reset_color}`);
-```
-
-Ten en cuenta que la capacidad de mostrar colores en la consola puede variar según el entorno y la configuración específicos, por lo que es posible que debas ajustar el código según tu situación.
-
-## importar
-Claro, aquí tienes ejemplos de cómo importar el archivo "colores_ascii" desde la carpeta "funciones" en diferentes lenguajes de programación: Lua, Dart, Python y JavaScript.
-
-Lua:
-```lua
-dofile("funciones/colores_ascii.lua")
-
--- Ahora puedes usar las variables definidas en colores_ascii
-print(rojo .. "Este texto es rojo" .. reset_color)
-```
-
-Dart:
-```dart
-import 'funciones/colores_ascii.dart';
-
-// Ahora puedes usar las variables definidas en colores_ascii
-print(rojo + "Este texto es rojo" + reset_color);
-```
-
-Python:
-```python
-from funciones.colores_ascii import *
-
-# Ahora puedes usar las variables definidas en colores_ascii
-print(rojo + "Este texto es rojo" + reset_color)
-```
-
-JavaScript (Node.js):
-```javascript
-const { rojo, reset_color } = require('./funciones/colores_ascii');
-
-// Ahora puedes usar las variables definidas en colores_ascii
-console.log(rojo + "Este texto es rojo" + reset_color);
-```
-
-Asegúrate de que el archivo "colores_ascii" esté ubicado en la carpeta "funciones" del directorio actual en cada uno de estos lenguajes para que las importaciones funcionen correctamente.
+if __name__ == "__main__":
+    print('Observando archivos Pug, Stylus y CoffeeScript...')
+    observar_cambios()
