@@ -1,23 +1,77 @@
-rojo = "\033[91m"
-cyan = "\033[96m"
-magenta = "\033[95m"
-blanco = "\033[97m"
-verde = "\033[92m"
-azul = "\033[94m"
-amarillo = "\033[93m"
-negro = "\033[90m"
+import 'dart:io';
 
-reset_color = "\033[0m"
-subrayado = "\033[4m"
-parpadeante = "\033[5m"
-invertido = "\033[7m"
-tachado = "\033[9m"
+// Directorios de archivos de origen
+final directorioPugOrigen = './src_pug';
+final directorioStylusOrigen = './src_stylus';
+final directorioCoffeeScriptOrigen = './src_coffeescript';
 
+// Directorios de archivos de destino
+final directorioHtmlDestino = './build_html';
+final directorioCssDestino = './build_css';
+final directorioJsDestino = './build_js';
 
-amarillo_brillante = "\033[93;1m"
-rojo_brillante = "\033[91;1m"
-verde_brillante = "\033[92;1m"
-azul_brillante = "\033[94;1m"
-magenta_brillante = "\033[95;1m"
-cyan_brillante = "\033[96;1m"
-blanco_brillante = "\033[97;1m"
+// Comandos para compilar archivos Pug, Stylus y CoffeeScript
+final comandoCompilarPug = 'pug {} -o {}';
+final comandoCompilarStylus = 'stylus {} -o {}';
+final comandoCompilarCoffeeScript = 'coffee -c {} -o {}';
+
+// Función para ejecutar un comando en la línea de comandos
+Future<void> ejecutarComando(String comando) async {
+  final proceso = await Process.start(comando, [], runInShell: true);
+  final stdoutStream = proceso.stdout.transform(Utf8Decoder());
+  final stderrStream = proceso.stderr.transform(Utf8Decoder());
+
+  await for (final line in stdoutStream) {
+    print(line);
+  }
+
+  await for (final line in stderrStream) {
+    print(line);
+  }
+}
+
+// Función para observar cambios en archivos
+Future<void> observarCambios() async {
+  try {
+    while (true) {
+      await for (final entity in Directory(directorioPugOrigen).list(recursive: true)) {
+        if (entity is File && entity.path.endsWith('.pug')) {
+          final rutaArchivo = entity.path;
+          await ejecutarComando(comandoCompilarPug
+              .replaceAll('{}', rutaArchivo)
+              .replaceAll('{}', directorioHtmlDestino));
+        }
+      }
+
+      await for (final entity in Directory(directorioStylusOrigen).list(recursive: true)) {
+        if (entity is File && entity.path.endsWith('.styl')) {
+          final rutaArchivo = entity.path;
+          await ejecutarComando(comandoCompilarStylus
+              .replaceAll('{}', rutaArchivo)
+              .replaceAll('{}', directorioCssDestino));
+        }
+      }
+
+      await for (final entity in Directory(directorioCoffeeScriptOrigen).list(recursive: true)) {
+        if (entity is File && entity.path.endsWith('.coffee')) {
+          final rutaArchivo = entity.path;
+          await ejecutarComando(comandoCompilarCoffeeScript
+              .replaceAll('{}', rutaArchivo)
+              .replaceAll('{}', directorioJsDestino));
+        }
+      }
+
+      print('Presiona Enter para continuar...');
+      await stdin.readLineSync();
+    }
+  } on FileSystemException catch (e) {
+    print('Error: $e');
+  } on ProcessException catch (e) {
+    print('Error al ejecutar el comando: $e');
+  }
+}
+
+void main() {
+  print('Observando archivos Pug, Stylus y CoffeeScript...');
+  observarCambios();
+}
