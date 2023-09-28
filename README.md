@@ -1,110 +1,70 @@
-# archivo ASCII_color
-Darle color a las palabras en la terminal con escapes ascii
+# Observador de Cambios y Compilación
 
-## descargar repositorii
+Este programa en Python te permite observar cambios en archivos Pug, Stylus y CoffeeScript en directorios de origen específicos y realizar la compilación correspondiente en directorios de destino. Es útil para automatizar el proceso de desarrollo web cuando trabajas con estos lenguajes y deseas compilarlos automáticamente al realizar modificaciones en tus archivos fuente.
 
-Puedes utilizar el comando `git clone` en Linux y git bash para descargar este repositorio de GitHub.
+## Requisitos
 
-```bash
-https://github.com/Bolkof/ASCIIcolor/tree/main
-```
+Asegúrate de tener los siguientes requisitos previos instalados en tu entorno de desarrollo:
 
-## que es esta carpeta
+- **Python**: Este programa está escrito en Python, por lo que necesitas tener Python 3.10 instalado en tu sistema. 
 
-El código proporcionado parece estar relacionado con la manipulación de colores de texto en la terminal utilizando códigos de escape ANSI. Aquí tienes algunas variables adicionales que podrían ser útiles:
+**Node.js**: Para la compilación de archivos Stylus y CoffeeScript, se utiliza Node.js como plataforma. Puedes descargar Node.js. 
+> apt-get install node.js
+  
+**Pug (Jade)**: Pug es un motor de plantillas para HTML. Puedes instalar la CLI de Pug utilizando el siguiente comando npm:
 
-Estos códigos de color te permitirán cambiar el color del texto en la terminal a rojo, verde y azul respectivamente. Puedes agregar más colores siguiendo el mismo patrón, cambiando el número de código ANSI para el color deseado. Recuerda también tener una variable `reset_color` como la que ya proporcionaste para restaurar el color original del texto cuando sea necesario.
+> sudo apt-get install pug-cli
 
-## contenido del archivo
+**Stylus**: Stylus es un preprocesador de CSS. Puedes instalar la CLI de Stylus con el siguiente comando npm:
 
-Secuencias de escape ANSI para cambiar el color del texto, guardado en variables
+> sudo apt-get install stylus
 
-```
-rojo = "\033[91m"
-cyan = "\033[96m"
-magenta = "\033[95m"
-blanco = "\033[97m"
-verde = "\033[92m"
-azul = "\033[94m"
-amarillo = "\033[93m"
-negro = "\033[90m"
+**CoffeeScript**: CoffeeScript es un lenguaje que se compila a JavaScript. Puedes instalar la CLI de CoffeeScript utilizando el siguiente comando npm:
 
-reset_color = "\033[0m"
-subrayado = "\033[4m"
-parpadeante = "\033[5m"
-invertido = "\033[7m"
-tachado = "\033[9m"
+>  npm install -g coffee-script
 
-amarillo_brillante = "\033[93;1m"
-rojo_brillante = "\033[91;1m"
-verde_brillante = "\033[92;1m"
-azul_brillante = "\033[94;1m"
-magenta_brillante = "\033[95;1m"
-cyan_brillante = "\033[96;1m"
-blanco_brillante = "\033[97;1m"
-```
+Asegúrate de que todas las dependencias estén correctamente instaladas en tu sistema antes de ejecutar el programa.
 
+## Uso
 
+1. Clona o descarga este repositorio en tu máquina local.
 
+2. Personaliza los directorios de origen y destino:
 
-## ejemplo de codigo
-Claro, aquí te proporcionaré ejemplos de cómo imprimir texto en los lenguajes Lua, Dart y JavaScript utilizando las variables de formato de color definidas en tu código:
+   Abre el archivo `observador_compilacion.py` y ajusta las siguientes variables para reflejar los directorios donde se encuentran tus archivos fuente y dónde deseas que se generen los archivos compilados:
 
-Lua:
-```lua
-print(rojo .. "Este es un texto rojo en Lua" .. reset_color)
-```
+   ```python
+   # Directorios de archivos de origen
+   directorio_pug_origen = './src_pug'
+   directorio_stylus_origen = './src_stylus'
+   directorio_coffeescript_origen = './src_coffeescript'
 
-Python:
-```
-print(f"{rojo}{subrayado}Este texto es rojo y subrayado{reset_color}")
-```
+   # Directorios de archivos de destino
+   directorio_html_destino = './build_html'
+   directorio_css_destino = './build_css'
+   directorio_js_destino = './build_js'
+   ```
 
-Dart (asumiendo que estás en un entorno que admite códigos ANSI para colores en la consola, de lo contrario, esto podría no funcionar):
-```dart
-print("$rojoEste es un texto rojo en Dart$reset_color");
-```
+3. Ejecuta el programa:
 
-JavaScript (en un entorno de consola que admite códigos ANSI para colores, como Node.js):
-```javascript
-console.log(`${rojo}Este es un texto rojo en JavaScript${reset_color}`);
-```
+   Abre tu terminal, navega al directorio donde se encuentra el archivo `observador_compilacion.py` y ejecuta el siguiente comando:
 
-Ten en cuenta que la capacidad de mostrar colores en la consola puede variar según el entorno y la configuración específicos, por lo que es posible que debas ajustar el código según tu situación.
+   ```shell
+   python supervisor.py
+   ```
 
-## importar
-Claro, aquí tienes ejemplos de cómo importar el archivo "colores_ascii" desde la carpeta "funciones" en diferentes lenguajes de programación: Lua, Dart, Python y JavaScript.
+   El programa comenzará a observar los cambios en los archivos Pug, Stylus y CoffeeScript en los directorios de origen especificados y realizará las compilaciones correspondientes en los directorios de destino cuando se detecten modificaciones.
 
-Lua:
-```lua
-dofile("funciones/colores_ascii.lua")
+4. Para detener el programa, simplemente presiona Ctrl+C en la terminal.
 
--- Ahora puedes usar las variables definidas en colores_ascii
-print(rojo .. "Este texto es rojo" .. reset_color)
-```
+## Personalización
 
-Dart:
-```dart
-import 'funciones/colores_ascii.dart';
+Si deseas agregar o eliminar tipos de archivo o realizar otras personalizaciones, puedes editar el código Python según tus necesidades. Asegúrate de tener las herramientas de compilación adecuadas instaladas en tu sistema para los lenguajes que estás utilizando (Pug, Stylus, CoffeeScript).
 
-// Ahora puedes usar las variables definidas en colores_ascii
-print(rojo + "Este texto es rojo" + reset_color);
-```
+## Contribución
 
-Python:
-```python
-from funciones.colores_ascii import *
+Si deseas contribuir a este proyecto o informar sobre problemas, siéntete libre de crear un issue o enviar una solicitud de extracción.
 
-# Ahora puedes usar las variables definidas en colores_ascii
-print(rojo + "Este texto es rojo" + reset_color)
-```
+## Licencia
 
-JavaScript (Node.js):
-```javascript
-const { rojo, reset_color } = require('./funciones/colores_ascii');
-
-// Ahora puedes usar las variables definidas en colores_ascii
-console.log(rojo + "Este texto es rojo" + reset_color);
-```
-
-Asegúrate de que el archivo "colores_ascii" esté ubicado en la carpeta "funciones" del directorio actual en cada uno de estos lenguajes para que las importaciones funcionen correctamente.
+Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para obtener más detalles.
